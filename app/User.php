@@ -36,4 +36,26 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     *  Returns themes for specific user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function themes() {
+        return $this->hasMany('App\Theme');
+    }
+
+
+    /**
+     * Should return patterns with sections for specific user (through users_patterns_sections table)
+     *
+     * @var array | Collection
+     */
+    public function patterns()
+    {
+        return $this->hasMany('App\Pattern');
+    }
+
+
 }

@@ -17,6 +17,11 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
+// Profile routes
+Route::get('profile', 'ProfileController@getForm')->name('profile');
+Route::post('profile', 'ProfileController@postReset');
+
+
 
 
 Route::get('/', function() {

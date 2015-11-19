@@ -27,3 +27,7 @@ Route::post('profile', 'ProfileController@postReset');
 Route::get('/', function() {
     return 'hw' . (Auth::check() ? Auth::user()->name : 'no user');
 })->name('home');
+
+
+
+Route::get('test', 'TestController@test');

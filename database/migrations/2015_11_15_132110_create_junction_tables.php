@@ -12,7 +12,7 @@ class CreateJunctionTables extends Migration
      */
     public function up()
     {
-        
+
         Schema::create('users_patterns', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('pattern_id');

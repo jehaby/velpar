@@ -14,7 +14,8 @@ class CreatePatternsTable extends Migration
     {
         Schema::create('patterns', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('pattern')->unique();
+            $table->string('pattern');
+            $table->enum('prefix', []);
             $table->timestamps();
         });
     }

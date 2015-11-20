@@ -15,7 +15,7 @@ class CreateRegexesTable extends Migration
         Schema::create('regexes', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('text');
+            $table->string('text')->unique();
         });
     }
 

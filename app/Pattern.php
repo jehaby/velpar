@@ -8,25 +8,27 @@ class Pattern extends Model
 {
 
 
-    public function sections($user_id = null)
+    public function users()
     {
-        if (! $user_id) {
-            return $this->hasMany('App\Section');
-        }
+        return $this->belongsToMany('App\User');
+    }
 
-        // get user by id
+
+    public function regex() {
+        return $this->belongsTo('App\Regex');
+    }
+
+
+    public function sections()
+    {
+        return $this->belongsToMany('App\Section');
     }
 
 
     public function prefixes()
     {
-        return $this->hasMany('App\Prefix');
+        return $this->belongsToMany('App\Prefix');
     }
 
-
-    public function users()
-    {
-        return $this->hasMany('App\User');
-    }
 
 }

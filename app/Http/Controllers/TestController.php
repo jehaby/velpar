@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Prefix;
+use App\Repositories\SectionRepository;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Util\StringHelper;
+
+use App\Regex;
+use App\Pattern;
+use App\Section;
+
+
+use App\Repositories\PrefixRepository;
 
 
 class TestController extends Controller
@@ -19,35 +28,22 @@ class TestController extends Controller
     }
 
 
-    public function test()
+    public function test(PrefixRepository $prefixRepository, SectionRepository $sectionRepository )
     {
 
-        $str = 'ель';
 
-        $expected = '[её]ль';
-//        var_dump($str, $this->helper->processYo($str) );
+        $pattern = Regex::create(['text' => '/sram/ui'])->patterns()->create([]);
 
-        $res = $this->helper->processYo($str);
+        $pattern->prefixes()->saveMany(
+            $prefixRepository->getByIds([1, 3])->all()
+        );
 
-//        dd(bin2hex('е'), bin2hex('ё'));
+        $pattern->sections()->saveMany(
+            $sectionRepository->getByIds([60, 63])->all()
+        );
 
-        var_dump($str, $expected, $res);
+        dd($pattern);
 
-        dd(bin2hex($str), bin2hex($expected), bin2hex($res));
-
-//        dd(bin2hex($expected), bin2hex($res));
-
-
-
-        dd(utf($expected), pack($res));
-
-        dd(strlen($expected), strlen($res));
-
-        dd($str, $res, strcmp($expected, $res));
-
-
-        dd(utf8_decode(imap_utf8($str)));
-        dd($str, $this->helper->processYo($str) );
     }
 
 

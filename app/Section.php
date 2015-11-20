@@ -10,9 +10,12 @@ class Section extends Model
     public $timestamps = false;
 
 
+    public $fillable = ['id', 'title'];
+
+
     public function patterns()
     {
-        return $this->hasMany('App\Pattern');
+        return $this->belongsToMany('App\Pattern');
     }
 
 

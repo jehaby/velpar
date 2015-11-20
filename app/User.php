@@ -40,10 +40,10 @@ class User extends Model implements AuthenticatableContract,
     /**
      *  Returns themes for specific user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function themes() {
-        return $this->hasMany('App\Theme');
+        return $this->belongsToMany('App\Theme');
     }
 
 
@@ -54,7 +54,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function patterns()
     {
-        return $this->hasMany('App\Pattern');
+        return $this->belongsToMany('App\Pattern');
     }
 
 

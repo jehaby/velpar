@@ -13,7 +13,7 @@ class CreatePrefixesTable extends Migration
     public function up()
     {
         Schema::create('prefixes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->smallIncrements('id');
             $table->string('title');
         });
     }

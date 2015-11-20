@@ -10,6 +10,9 @@ use App\Contracts\BaseRepositoryContract;
 class PatternRepository implements BaseRepositoryContract
 {
 
+    protected $model;
+
+
     public function errors()
     {
         // TODO: Implement errors() method.

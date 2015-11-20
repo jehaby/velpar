@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatternsTable extends Migration
+class CreatePrefixesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,9 @@ class CreatePatternsTable extends Migration
      */
     public function up()
     {
-        Schema::create('patterns', function (Blueprint $table) {
+        Schema::create('prefixes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('regex_id');
-            $table->foreign('regex_id')->references('id')->on('regexes');
-            $table->timestamps();
+            $table->string('title');
         });
     }
 
@@ -27,6 +25,6 @@ class CreatePatternsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('patterns');
+        Schema::drop('prefixes');
     }
 }

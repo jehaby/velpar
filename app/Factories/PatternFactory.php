@@ -26,7 +26,7 @@ class PatternFactory
      * @param $sections_ids
      *
      */
-    public function create($patternText, $userId, $sectionsIds, $prefixes = null)
+    public function create($patternText, $userId, $sectionIds, $prefixIds = null)
     {
         $patternText = $this->helper->preparePatter($patternText);
 

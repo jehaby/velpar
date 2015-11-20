@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Velpar\Checker;
+use App\Util\Checker;
 
 
 class CheckerTest extends PHPUnit_Framework_TestCase

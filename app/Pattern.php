@@ -14,7 +14,19 @@ class Pattern extends Model
             return $this->hasMany('App\Section');
         }
 
+        // get user by id
+    }
 
+
+    public function prefixes()
+    {
+        return $this->hasMany('App\Prefix');
+    }
+
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
     }
 
 }

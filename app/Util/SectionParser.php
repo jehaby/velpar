@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Velpar;
+namespace App\Util;
 
 
 

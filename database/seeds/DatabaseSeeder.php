@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PrefixesSeeder::class);
         $this->call(SectionsSeeder::class);
         $this->call(UsersSeeder::class);
-//        $this->call(PatternsSeeder::class);
+        $this->call(PatternsSeeder::class);
         Model::reguard();
     }
 }

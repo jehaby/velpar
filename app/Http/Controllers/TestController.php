@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Prefix;
 use App\Repositories\SectionRepository;
+use App\Services\PatternService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -22,25 +23,19 @@ class TestController extends Controller
 {
 
 
-    public function __construct(StringHelper $helper)
+    public function __construct()
     {
-        $this->helper = $helper;
+        $this->middleware('auth', ['except' => 'getLogout']);
     }
 
 
-    public function test(PrefixRepository $prefixRepository, SectionRepository $sectionRepository )
+
+
+
+    public function test(PatternService $service)
     {
 
-
-        $pattern = Regex::create(['text' => '/sram/ui'])->patterns()->create([]);
-
-        $pattern->prefixes()->saveMany(
-            $prefixRepository->getByIds([1, 3])->all()
-        );
-
-        $pattern->sections()->saveMany(
-            $sectionRepository->getByIds([60, 63])->all()
-        );
+        $pattern = $service->createOrReturnExisting([]);
 
         dd($pattern);
 

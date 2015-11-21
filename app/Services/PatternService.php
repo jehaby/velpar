@@ -23,55 +23,51 @@ class PatternService
         PrefixRepository $prefixRepository,
         RegexRepository $regexRepository,
         SectionRepository $sectionRepository,
-        ThemeRepository $themeRepository
+        ThemeRepository $themeRepository,
+        User $user                              // TODO: repository?
     ) {
         $this->patternRepository = $patternRepository;
         $this->prefixRepository = $prefixRepository;
         $this->regexRepository = $regexRepository;
         $this->sectionRepository = $sectionRepository;
         $this->themeRepository = $themeRepository;
+        $this->user = $user;
     }
 
 
-    public function create(array $input)
+    /**
+     * @param array $data
+     * @return \App\Pattern
+     */
+    public function createOrReturnExisting(array $data)
     {
-        // get user
-        // get pattern text
-        // get sections
-        // get prefixes
+
+        // TODO: User!
+
+        $regex = $this->regexRepository->findOrCreate($data['regex']);
 
 
-        $data = [
-            'user_id' => 1,
-            'regex' => '/руль/ui',  // should process with StringHelper, maybe earlier
-            'section_ids' => [60, 63],  // must be at least one
-            'prefix_ids' => [1, 3],
-        ];
+        foreach ($regex->patterns as $pattern) {  // TODO: move to repo (patterns? regexes? )
 
-
-
-        $regex = $this->regexRepository->findOrCreate('regex');
+            if (
+                arrays_have_same_values($data['section_ids'], $pattern->sections->pluck('id')->all())    // you are getting collection of App\Section!!
+                && arrays_have_same_values($data['prefix_ids'], $pattern->prefixes->pluck('id')->all())
+            ) {
+                return $pattern;
+            }
+        }
 
         $pattern = $regex->patterns()->create([]);
 
-        $pattern->prefixes()->saveMany(
+        $pattern->prefixes()->saveMany(   // TODO: move it to pattern or prefix repo ?
             $this->prefixRepository->getByIds($data['prefix_ids'])->all()
         );
 
-        $pattern->sections()->saveMany(
+        $pattern->sections()->saveMany(   // TODO: move it to pattern or section repo ?
             $this->sectionRepository->getByIds($data['section_ids'])->all()
         );
 
-
-        dd();
-
-
-        $pattern = $this->patternRepository->create($regex->id);
-
-        $pattern = $this->checkIfSamePatternExists();   // TODO: stop here!!!
-
-
-
+        return $pattern;
 
 
         // first check regex, if already exists then get id, otherwise create  ( findOrCreate )
@@ -90,30 +86,25 @@ class PatternService
     public function edit(array $input)
     {
 
+
+
+
+
+        // if pattern has only one user, it should be easy. But what happens with all the themes already connected to this pattern?
+        // Maybe it will be easier to just create new pattern?
+
     }
 
 
-    public function checkForExistingEntity($data)
+    public function delete($patternId)  // or model?
     {
 
-        $data = [
-            'regex' => '/руль/ui',  // should process with StringHelper, maybe earlier
-            'section_ids' => [60, 64],  // must be at least one
-            'prefix_ids' => [1],
-        ];
 
-        $regex = $this->regexRepository->findOrCreate($data['regex']);
-
-
-        foreach ($regex->patterns() as $pattern) {
-
-            $pattern->sections();
-
-
-        }
+        // if pattern has only one user, it should be easy. But what happens with all the themes already connected to this pattern?
 
 
     }
+
 
 
 }

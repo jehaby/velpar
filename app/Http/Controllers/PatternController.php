@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PatternService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -9,6 +10,15 @@ use App\Http\Controllers\Controller;
 
 class PatternController extends Controller
 {
+
+
+    public function __construct(PatternService $patternService)
+    {
+        $this->middleware('auth');
+        $this->patternService = $patternService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *

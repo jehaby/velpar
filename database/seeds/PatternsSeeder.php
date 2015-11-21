@@ -8,10 +8,20 @@ use App\Pattern;
 use App\Regex;
 use App\Section;
 use App\Prefix;
+use App\Services\PatternService;
+
 
 
 class PatternsSeeder extends Seeder
 {
+
+
+    public function __construct(PatternService $service)
+    {
+        $this->service = $service;
+    }
+
+
     /**
      * Run the database seeds.
      *
@@ -20,11 +30,15 @@ class PatternsSeeder extends Seeder
     public function run()
     {
 
-        $pattern = Regex::create(['text' => '/shimano/ui'])->patterns()->create([]);
+        $data = [
+            'user_id' => 1,
+            'regex' => '/руль/ui',  // should process with StringHelper, maybe earlier
+            'section_ids' => [60, 63],  // must be at least one
+            'prefix_ids' => [1, 3, 5],
+        ];
 
-        $pattern->prefixes->saveMany([
 
-        ]);
+        $this->service->createOrReturnExisting($data);
 
 
 

@@ -16,32 +16,32 @@ class CreateJunctionTables extends Migration
         Schema::create('user_pattern', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('pattern_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('pattern_id')->references('id')->on('patterns');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
         });
 
 
         Schema::create('pattern_section', function (Blueprint $table) {
             $table->unsignedInteger('pattern_id');
             $table->unsignedSmallInteger('section_id');
-            $table->foreign('pattern_id')->references('id')->on('patterns');
-            $table->foreign('section_id')->references('id')->on('sections');
+            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('restrict');
         });
 
 
         Schema::create('pattern_prefix', function (Blueprint $table) {
             $table->unsignedInteger('pattern_id');
             $table->unsignedSmallInteger('prefix_id');
-            $table->foreign('pattern_id')->references('id')->on('patterns');
-            $table->foreign('prefix_id')->references('id')->on('prefixes');
+            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
+            $table->foreign('prefix_id')->references('id')->on('prefixes')->onDelete('restrict');
         });
 
 
         Schema::create('pattern_theme', function (Blueprint $table) {
             $table->unsignedInteger('pattern_id');
             $table->unsignedInteger('theme_id');
-            $table->foreign('pattern_id')->references('id')->on('patterns');
-            $table->foreign('theme_id')->references('id')->on('themes');
+            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
+            $table->foreign('theme_id')->references('id')->on('themes')->onDelete('restrict');
         });
 
     }

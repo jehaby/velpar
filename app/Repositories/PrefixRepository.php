@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Prefix;
+use Illuminate\Support\Collection;
 
 
 class PrefixRepository
@@ -18,6 +19,7 @@ class PrefixRepository
 
     /**
      *
+     * @return Collection
      */
     public function getByIds(array $ids)
     {

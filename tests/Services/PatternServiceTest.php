@@ -11,7 +11,7 @@ class PatternServiceTest extends TestCase
     /**
      * @var PatternService
      */
-    public $service;
+    private $service;
 
 
     public function setUp()
@@ -38,20 +38,53 @@ class PatternServiceTest extends TestCase
     }
 
 
-    public function createDataProvider()
+    public function testCreateNotCreatesDuplicate()
     {
+        // TODO: implement test
+    }
+
+
+
+    /**
+     * @dataProvider tryFindPatternProvider
+     */
+    public function testTryFindPattern($data) {
+        $this->seeInDatabase('regexes', ['text' => $data['regex']]);
+        foreach ($data['section_ids'] as $sectionId) {
+            $this->seeInDatabase('pattern_section', ['section_id' => $sectionId]);
+        }
+        foreach ($data['prefix_ids'] as $prefixId) {
+            $this->seeInDatabase('pattern_prefix', ['prefix_id' => $prefixId]);
+        }
+        $this->assertNotNull($newPatternId = $this->service->tryFindPattern($data['regex'], $data['section_ids'], $data['prefix_ids']));
+    }
+
+
+    public function createDataProvider() {
         return [
             [
                 [
-                'user_id' => 1,
-                'regex' => '/sramchik/ui',  // should process with StringHelper, maybe earlier
-                'section_ids' => [60, 63],  // must be at least one
-                'prefix_ids' => [1, 3, 5],
-                ]
+                    'user_id' => 1,
+                    'regex' => '/sramchik/ui',  // should process with StringHelper, maybe earlier
+                    'section_ids' => [60, 63],  // must be at least one
+                    'prefix_ids' => [1, 3, 5],
+                ],
             ],
 
         ];
     }
 
+
+    public function tryFindPatternProvider() {
+        return [
+            [
+                [
+                    'regex' => '/very_special_regex/ui',  // should process with StringHelper, maybe earlier
+                    'section_ids' => [60, 63],  // must be at least one
+                    'prefix_ids' => [1, 3, 5],
+                ],
+            ],
+        ];
+    }
 
 }

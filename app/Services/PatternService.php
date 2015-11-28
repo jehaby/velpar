@@ -14,6 +14,13 @@ use App\Util\StringHelper;
 
 
 
+/**
+ * Class PatternService
+ *
+ * Represents various actions with Pattern.
+ *
+ * @package App\Services
+ */
 class PatternService
 {
 
@@ -39,35 +46,22 @@ class PatternService
      * @param array $data
      * @return \App\Pattern
      */
-    public function createOrReturnExisting(array $data)
-    {
+    public function createOrReturnExisting(array $data) {
 
-        // TODO: User!
+        $pattern = $this->tryFindPattern($data['regex'], $data['section_ids'], $data['prefix_ids']);
 
-        $regex = $this->regexRepository->findOrCreate($data['regex']);
-
-
-        foreach ($regex->patterns as $pattern) {  // TODO: move to repo (patterns? regexes? )
-
-            if (
-                arrays_have_same_values($data['section_ids'], $pattern->sections->pluck('id')->all())    // you are getting collection of App\Section!!
-                && arrays_have_same_values($data['prefix_ids'], $pattern->prefixes->pluck('id')->all())
-            ) {
-                return $pattern;
-            }
+        if (! $pattern) {
+            $pattern = $this->patternRepository->create([
+                'regex' => $this->regexRepository->findOrCreate($data['regex']),
+                'sections' => $this->sectionRepository->getByIds($data['section_ids'])->all(),
+                'prefixes' => $this->prefixRepository->getByIds($data['prefix_ids'])->all()
+            ]);
         }
 
-        $pattern = $regex->patterns()->create([]);
-
-        $pattern->prefixes()->saveMany(   // TODO: move it to pattern or prefix repo ?
-            $this->prefixRepository->getByIds($data['prefix_ids'])->all()
-        );
-
-        $pattern->sections()->saveMany(   // TODO: move it to pattern or section repo ?
-            $this->sectionRepository->getByIds($data['section_ids'])->all()
-        );
-
         return $pattern;
+
+        // TODO: User!
+        $this->user->patterns($pattern);
 
 
         // first check regex, if already exists then get id, otherwise create  ( findOrCreate )
@@ -83,14 +77,44 @@ class PatternService
     }
 
 
-    public function edit(array $input)
-    {
+    /**
+     * @param $regexText string
+     * @param $sectionIds array
+     * @param $prefixIds array
+     */
+    public function tryFindPattern($regexText, $sectionIds, $prefixIds) {
+
+        if ( ! $regex = $this->regexRepository->getWhere('text', $regexText) ) {
+            return null; // or false?
+        }
+
+        $patterns = $regex->patterns;               // TODO: eager loading!
+
+        foreach ($regex->patterns as $pattern) {  // TODO: move to repo (patterns? regexes? )  it might be possible to do much faster using cool big scary query to database
+
+            if (
+                arrays_have_same_values($sectionIds, $pattern->sections->pluck('id')->all())    // you are getting collection of App\Section!!
+                && arrays_have_same_values($prefixIds, $pattern->prefixes->pluck('id')->all())
+            ) {
+                return $pattern;
+            }
+        }
+
+        return null;
+
+    }
+
+
+    public function edit(array $input) {
 
 
 
 
 
-        // if pattern has only one user, it should be easy. But what happens with all the themes already connected to this pattern?
+
+
+        // If pattern has only one user, it should be easy.
+        // But what happens with all the themes already connected to this pattern ?!
         // Maybe it will be easier to just create new pattern?
 
     }

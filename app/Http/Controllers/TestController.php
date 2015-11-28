@@ -35,7 +35,17 @@ class TestController extends Controller
     public function test(PatternService $service)
     {
 
-        $pattern = $service->createOrReturnExisting([]);
+//        dd(Regex::where('text', '/sramchikk/ui')->first());
+
+        $data =                 [
+            'user_id' => 1,
+            'regex' => '/sramchik/ui',  // should process with StringHelper, maybe earlier
+            'section_ids' => [60, 63, 66],  // must be at least one
+            'prefix_ids' => [1, 3, 5],
+        ];
+
+
+        $pattern = $service->createOrReturnExisting($data);
 
         dd($pattern);
 

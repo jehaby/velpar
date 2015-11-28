@@ -40,7 +40,11 @@ class PatternRepository implements BaseRepositoryContract
 
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        // TODO: check data for errors!
+        $pattern = $data['regex']->patterns()->create([]);
+        $pattern->prefixes()->saveMany($data['prefixes']);
+        $pattern->sections()->saveMany($data['sections']);
+        return $pattern;
     }
 
     public function update(array $data)

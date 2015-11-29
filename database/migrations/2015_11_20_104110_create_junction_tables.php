@@ -18,6 +18,7 @@ class CreateJunctionTables extends Migration
             $table->unsignedInteger('pattern_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
+            $table->unique(['pattern_id', 'user_id']);
         });
 
 
@@ -26,6 +27,7 @@ class CreateJunctionTables extends Migration
             $table->unsignedSmallInteger('section_id');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('restrict');
+            $table->unique(['pattern_id', 'section_id']);
         });
 
 
@@ -34,6 +36,7 @@ class CreateJunctionTables extends Migration
             $table->unsignedSmallInteger('prefix_id');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
             $table->foreign('prefix_id')->references('id')->on('prefixes')->onDelete('restrict');
+            $table->unique(['pattern_id', 'prefix_id']);
         });
 
 
@@ -42,6 +45,7 @@ class CreateJunctionTables extends Migration
             $table->unsignedInteger('theme_id');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
             $table->foreign('theme_id')->references('id')->on('themes')->onDelete('restrict');
+            $table->unique(['pattern_id', 'theme_id']);
         });
 
     }

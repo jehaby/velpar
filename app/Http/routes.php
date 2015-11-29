@@ -31,3 +31,18 @@ Route::get('/', function() {
 
 
 Route::get('test', 'TestController@test');
+
+Route::get('noauth', 'TestController@noauth');
+
+
+
+//Route::resource();
+
+Route::group(['prefix' => 'patterns'], function() {
+    Route::get('', 'PatternController@index');
+    Route::get('create', 'PatternController@create')->name('pattern_create');
+    Route::post('store', 'PatternController@store');
+    Route::get('edit/{pattern}', 'PatternController@edit');
+    Route::post('update', 'PatternController@update');
+    Route::post('delete/{pattern}', 'PatternController@destroy');
+});

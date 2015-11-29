@@ -54,7 +54,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function patterns()
     {
-        return $this->belongsToMany('App\Pattern');
+        return $this->belongsToMany('App\Pattern', 'user_pattern');
     }
 
 

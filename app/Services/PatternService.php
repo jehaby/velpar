@@ -8,9 +8,10 @@ use App\Repositories\PrefixRepository;
 use App\Repositories\RegexRepository;
 use App\Repositories\SectionRepository;
 use App\Repositories\ThemeRepository;
-use App\User;
+use App\Repositories\UserRepository;
 use App\Theme;
 use App\Util\StringHelper;
+use App\Exceptions\UserAlreadyHaveSuchPatternException;
 
 
 
@@ -31,14 +32,14 @@ class PatternService
         RegexRepository $regexRepository,
         SectionRepository $sectionRepository,
         ThemeRepository $themeRepository,
-        User $user                              // TODO: repository?
+        UserRepository $userRepository
     ) {
         $this->patternRepository = $patternRepository;
         $this->prefixRepository = $prefixRepository;
         $this->regexRepository = $regexRepository;
         $this->sectionRepository = $sectionRepository;
         $this->themeRepository = $themeRepository;
-        $this->user = $user;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -58,21 +59,13 @@ class PatternService
             ]);
         }
 
+        try {
+            $this->userRepository->addPattern($pattern);
+        } catch (UserAlreadyHaveSuchPatternException $e) {
+            dd($e);
+        }
+
         return $pattern;
-
-        // TODO: User!
-        $this->user->patterns($pattern);
-
-
-        // first check regex, if already exists then get id, otherwise create  ( findOrCreate )
-        //  then fill patterns_prefixes and patterns_sections
-
-        // what if user adds same pattern twice (or pattern that already exists on other user(s)?
-
-        // what if user changes pattern that connected with other user(s)?
-
-        // what if user deletes pattern that connected with other user(s)?
-
 
     }
 
@@ -129,6 +122,11 @@ class PatternService
 
     }
 
+
+    public function getAllPatternsForUser()
+    {
+        
+    }
 
 
 }

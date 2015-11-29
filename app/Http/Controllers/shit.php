@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\UserAlreadyHaveSuchPatternException;
-use App\Pattern;
-use App\Services\PatternService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class PatternController extends Controller
+class shit extends Controller
 {
-
-
-    public function __construct(PatternService $patternService)
-    {
-        $this->middleware('auth');
-        $this->patternService = $patternService;
-    }
-
-
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +16,7 @@ class PatternController extends Controller
      */
     public function index()
     {
-        $patterns = \Auth::user()->paterns()->with(['sections', 'prefixes', 'regexes']);
-        dd($patterns);
-        return view('patterns.index')->with(['patterns' => $patterns]);
+        //
     }
 
     /**
@@ -40,7 +26,7 @@ class PatternController extends Controller
      */
     public function create()
     {
-        return view('patterns.create');
+        //
     }
 
     /**
@@ -51,13 +37,7 @@ class PatternController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $this->patternService->createOrReturnExisting([]);
-        } catch (UserAlreadyHaveSuchPatternException $e) {
-            // TODO: return with error UserAlreadyHaveSuchPatternException
-        } catch (\Exception $e) {
-            // TODO: return with general error
-        }
+        //
     }
 
     /**
@@ -66,7 +46,7 @@ class PatternController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Pattern $pattern)
+    public function show($id)
     {
         //
     }
@@ -77,10 +57,9 @@ class PatternController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pattern $pattern)
+    public function edit($id)
     {
-        $pattern->load(['regex', 'prefixes', 'sections']);
-        return view('patterns.edit')->with(['pattern' => $pattern]);
+        //
     }
 
     /**
@@ -92,7 +71,6 @@ class PatternController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         //
     }
 
@@ -102,12 +80,8 @@ class PatternController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pattern $pattern)
+    public function destroy($id)
     {
-        try {
-            $this->patternService->delete();
-        } catch (\Exception $e) {
-            // TODO: show general error
-        }
+        //
     }
 }

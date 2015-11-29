@@ -14,6 +14,7 @@ use App\Util\StringHelper;
 use App\Regex;
 use App\Pattern;
 use App\Section;
+use App\User;
 
 
 use App\Repositories\PrefixRepository;
@@ -25,22 +26,22 @@ class TestController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'getLogout']);
+        $this->middleware('auth', ['except' => 'noauth']);
     }
-
-
 
 
 
     public function test(PatternService $service)
     {
 
-//        dd(Regex::where('text', '/sramchikk/ui')->first());
+
+        dump(\Auth::user());
+        dd('wtklsdjf');
 
         $data =                 [
             'user_id' => 1,
-            'regex' => '/sramchik/ui',  // should process with StringHelper, maybe earlier
-            'section_ids' => [60, 63, 66],  // must be at least one
+            'regex' => '/new_shit/ui',  // should process with StringHelper, maybe earlier
+            'section_ids' => [60, 63],  // must be at least one
             'prefix_ids' => [1, 3, 5],
         ];
 
@@ -49,6 +50,23 @@ class TestController extends Controller
 
         dd($pattern);
 
+        dd(Regex::whereId(1)->with(['patterns.sections', 'patterns.prefixes']));
+
+    }
+
+
+    public function noauth(PatternService $service)
+    {
+        $data =                 [
+            'user_id' => 1,
+            'regex' => '/new_shit/ui',  // should process with StringHelper, maybe earlier
+            'section_ids' => [60, 63],  // must be at least one
+            'prefix_ids' => [1, 3, 5],
+        ];
+
+
+        $pattern = $service->createOrReturnExisting($data);
+        dd($pattern);
     }
 
 

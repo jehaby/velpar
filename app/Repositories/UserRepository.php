@@ -5,10 +5,36 @@ namespace App\Repositories;
 
 
 use App\Contracts\BaseRepositoryContract;
+use App\Exceptions\UserAlreadyHaveSuchPatternException;
+use App\User;
+use Illuminate\Database\QueryException;
 
 
 class UserRepository implements BaseRepositoryContract
 {
+
+    /**
+     * @var User
+     */
+    private $model;
+
+
+    public function __construct(User $user) {
+        $this->model = $user;
+    }
+
+
+    public function addPattern(\App\Pattern $pattern)
+    {
+        try {
+            $this->model->patterns()->save($pattern);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23505') {  // TODO: this is probably sucks
+                throw new UserAlreadyHaveSuchPatternException('', $e);
+            }
+        }
+    }
+
 
     public function errors()
     {

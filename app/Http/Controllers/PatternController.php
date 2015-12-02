@@ -104,6 +104,12 @@ class PatternController extends Controller
      */
     public function destroy(Pattern $pattern)
     {
+
+        echo $pattern->regex;
+        dd(
+            $pattern,
+            $pattern->regex
+        );
         try {
             $this->patternService->delete();
         } catch (\Exception $e) {

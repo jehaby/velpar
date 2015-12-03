@@ -44,5 +44,5 @@ Route::group(['prefix' => 'patterns'], function() {
     Route::post('store', 'PatternController@store');
     Route::get('edit/{pattern}', 'PatternController@edit');
     Route::post('update', 'PatternController@update');
-    Route::get('delete/{pattern}', 'PatternController@destroy');
+    Route::get('delete/{pattern}', 'PatternController@delete');
 });

@@ -95,10 +95,17 @@ class PatternController extends Controller
     public function update(Pattern $pattern, Request $request)
     {
 
+        $data = [
+            'pattern_id' => 1,
+            'regex' => '/edited/ui',  // should process with StringHelper, maybe earlier
+            'section_ids' => [60, 63],  // must be at least one
+            'prefix_ids' => [1, 3, 5],
+        ];
 
 
 
-        $this->patternService->edit();
+
+        $this->patternService->edit($data);
     }
 
     /**
@@ -107,17 +114,12 @@ class PatternController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pattern $pattern)
+    public function delete(Pattern $pattern)
     {
-
-        echo $pattern->regex;
-        dd(
-            $pattern,
-            $pattern->regex
-        );
         try {
-            $this->patternService->delete();
+            $this->patternService->delete($pattern);
         } catch (\Exception $e) {
+            throw $e;
             // TODO: show general error
         }
     }

@@ -5,11 +5,15 @@ namespace App\Repositories;
 
 
 use App\Contracts\BaseRepositoryContract;
+use App\Pattern;
 
 
 class PatternRepository implements BaseRepositoryContract
 {
 
+    /**
+     * @var Pattern
+     */
     protected $model;
 
 
@@ -52,9 +56,17 @@ class PatternRepository implements BaseRepositoryContract
         // TODO: Implement update() method.
     }
 
-    public function delete($id)
+
+    /**
+     * @param $pattern int|Pattern
+     */
+    public function delete($pattern)
     {
-        // TODO: Implement delete() method.
+        if ($pattern instanceof Pattern) {
+            $pattern->delete();
+        } else {
+            Pattern::destroy($pattern);
+        }
     }
 
     public function deleteWhere($column, $value)

@@ -48,7 +48,7 @@ class PatternServiceTest extends TestCase
     /**
      * @dataProvider tryFindPatternProvider
      */
-    public function testTryFindPattern($data) {
+    public function testTryFindPattern(array $data) {
         $this->seeInDatabase('regexes', ['text' => $data['regex']]);
         foreach ($data['section_ids'] as $sectionId) {
             $this->seeInDatabase('pattern_section', ['section_id' => $sectionId]);
@@ -87,11 +87,24 @@ class PatternServiceTest extends TestCase
         ];
     }
 
-    public function testDeletePattern(Pattern $pattern) {
+
+    /**
+     * @param Pattern $pattern deletePatternProvider
+     */
+    public function testDeletePattern(array $data) {
+
 
         
 
 
+    }
+
+
+    public function deletePatternProvider()
+    {
+        return [
+            ''
+        ];
     }
 
 }

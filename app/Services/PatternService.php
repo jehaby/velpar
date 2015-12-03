@@ -10,6 +10,7 @@ use App\Repositories\SectionRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\UserRepository;
 use App\Theme;
+use App\Pattern;
 use App\Util\StringHelper;
 use App\Exceptions\UserAlreadyHaveSuchPatternException;
 
@@ -121,14 +122,21 @@ class PatternService
     }
 
 
-    public function delete($patternId)  // or model?
+    public function delete(Pattern $pattern)  // or model?
     {
-        
 
+//        $this->userRepository->getCurrentUser()->patterns()->attach($pattern);
+
+        if (! $this->patternBelongsToCurrentUser($pattern)) {
+            throw new \LogicException("User is trying to delete pattern which doesn't belong him");
+        }
+
+        if ($pattern->users->count() != 1) {
+            $this->userRepository->detachPattern($pattern);
+        } else {
+            $this->patternRepository->delete($pattern);
+        }
         // if pattern has only one user, it should be easy. But what happens with all the themes already connected to this pattern?
-
-        // check if user own pattern!
-
 
     }
 
@@ -136,6 +144,15 @@ class PatternService
     public function getAllPatternsForUser()
     {
         return $this->userRepository->getPatterns();
+    }
+
+
+    public function patternBelongsToCurrentUser(Pattern $pattern)
+    {
+        return in_array(
+            $this->userRepository->getCurrentUser()->id,
+            $pattern->users()->lists('id')->all()
+        );
     }
 
 

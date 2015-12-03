@@ -23,7 +23,7 @@
             <tbody>
             @foreach($patterns as $pattern)
                 <tr>
-                    <td>{{ $pattern->regex->text }}</td>
+                    <td>{{ $pattern->regex }}</td>
                     <td>{{ $pattern->sections }}</td>
                     <td>{{ $pattern->prefixes }}</td>
                     <td> TODO </td>

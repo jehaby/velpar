@@ -15,5 +15,10 @@ class Regex extends Model
         return $this->hasMany('App\Pattern');
     }
 
+    
+    public function __toString() {
+        return (substr($this->text, 1, -3));
+    }
+
 
 }

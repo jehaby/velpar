@@ -87,4 +87,11 @@ class PatternServiceTest extends TestCase
         ];
     }
 
+    public function testDeletePattern(Pattern $pattern) {
+
+        
+
+
+    }
+
 }

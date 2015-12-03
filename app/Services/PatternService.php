@@ -45,6 +45,7 @@ class PatternService
 
     /**
      * @param array $data
+     * @throws UserAlreadyHasSuchPatternException()
      * @return \App\Pattern
      */
     public function createOrReturnExisting(array $data)
@@ -60,11 +61,7 @@ class PatternService
             ]);
         }
 
-        try {
-            $this->userRepository->addPattern($pattern);
-        } catch (UserAlreadyHaveSuchPatternException $e) {
-            dd($e);
-        }
+        $this->userRepository->addPattern($pattern);
 
         return $pattern;
 
@@ -111,8 +108,8 @@ class PatternService
 
 
 
-
-
+        
+        
 
 
 
@@ -126,9 +123,11 @@ class PatternService
 
     public function delete($patternId)  // or model?
     {
-
+        
 
         // if pattern has only one user, it should be easy. But what happens with all the themes already connected to this pattern?
+
+        // check if user own pattern!
 
 
     }

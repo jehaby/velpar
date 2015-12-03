@@ -47,7 +47,8 @@ class PatternService
      * @param array $data
      * @return \App\Pattern
      */
-    public function createOrReturnExisting(array $data) {
+    public function createOrReturnExisting(array $data)
+    {
 
         $pattern = $this->tryFindPattern($data['regex'], $data['section_ids'], $data['prefix_ids']);
 
@@ -75,7 +76,8 @@ class PatternService
      * @param $sectionIds array
      * @param $prefixIds array
      */
-    public function tryFindPattern($regexText, $sectionIds, $prefixIds) {
+    public function tryFindPattern($regexText, $sectionIds, $prefixIds)
+    {
 
         if ( ! $regex = $this->regexRepository->getWhere('text', $regexText) ) {
             return null; // or false?
@@ -98,7 +100,16 @@ class PatternService
     }
 
 
-    public function edit(array $input) {
+    /**
+     * Edits existing pattern
+     *
+     * @param Pattern $pattern
+     * @param array $newData
+     */
+    public function edit(Pattern $pattern, array $newData)
+    {
+
+
 
 
 
@@ -125,7 +136,7 @@ class PatternService
 
     public function getAllPatternsForUser()
     {
-        
+        return $this->userRepository->getPatterns();
     }
 
 

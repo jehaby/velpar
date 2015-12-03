@@ -5,10 +5,32 @@
 
     <div class="container">
 
-        @foreach($patterns as $pattern)
+        <table class="table-stripped">
+
+            <thead>
+
+            <tr>
+                <th>Паттерн</th>
+                <th>Секции</th>
+                <th>Префиксы</th>
+                <th>Новых тем за день</th>
+
+            </tr>
+
+            </thead>
 
 
-        @endforeach
+            <tbody>
+            @foreach($patterns as $pattern)
+                <tr>
+                    <td>{{ $pattern->regex->text }}</td>
+                    <td>{{ $pattern->sections }}</td>
+                    <td>{{ $pattern->prefixes }}</td>
+                    <td> TODO </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
 
     </div>
 

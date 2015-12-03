@@ -36,6 +36,18 @@ class UserRepository implements BaseRepositoryContract
     }
 
 
+    public function getPatterns()
+    {
+        return $this->model->patterns();
+    }
+
+
+    public function getThemes()
+    {
+        return $this->model->themes();
+    }
+
+
     public function errors()
     {
         // TODO: Implement errors() method.

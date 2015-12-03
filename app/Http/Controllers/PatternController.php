@@ -28,8 +28,7 @@ class PatternController extends Controller
      */
     public function index()
     {
-        $patterns = \Auth::user()->paterns()->with(['sections', 'prefixes', 'regexes']);
-        dd($patterns);
+        $patterns = \Auth::user()->patterns()->with(['sections', 'prefixes', 'regex'])->get();
         return view('patterns.index')->with(['patterns' => $patterns]);
     }
 
@@ -58,6 +57,9 @@ class PatternController extends Controller
         } catch (\Exception $e) {
             // TODO: return with general error
         }
+
+        // TODO: redirect back or somewhere else with success
+        redirect();
     }
 
     /**
@@ -90,10 +92,13 @@ class PatternController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Pattern $pattern, Request $request)
     {
 
-        //
+
+
+
+        $this->patternService->edit();
     }
 
     /**

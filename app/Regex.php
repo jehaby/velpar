@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Regex extends Model
+class Regex extends BaseModel
 {
 
     public $fillable = ['text'];

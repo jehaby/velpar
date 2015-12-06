@@ -51,7 +51,7 @@ class PatternController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->patternService->createOrReturnExisting([]);
+            $this->patternService->create([]);
         } catch (UserAlreadyHaveSuchPatternException $e) {
             // TODO: return with error UserAlreadyHaveSuchPatternException
         } catch (\Exception $e) {
@@ -96,16 +96,16 @@ class PatternController extends Controller
     {
 
         $data = [
-            'pattern_id' => 1,
             'regex' => '/edited/ui',  // should process with StringHelper, maybe earlier
             'section_ids' => [60, 63],  // must be at least one
             'prefix_ids' => [1, 3, 5],
         ];
 
-
-
-
-        $this->patternService->edit($data);
+        try {
+            $this->patternService->edit($pattern, $data);
+        } catch (Exception $e) {
+            redirect('patterns/edit')->withErrors('Something was wrong');
+        }
     }
 
     /**

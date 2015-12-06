@@ -17,6 +17,12 @@ class PatternRepository implements BaseRepositoryContract
     protected $model;
 
 
+    public function __construct(Pattern $pattern)
+    {
+        $this->model = $pattern;
+    }
+
+
     public function errors()
     {
         // TODO: Implement errors() method.
@@ -46,8 +52,8 @@ class PatternRepository implements BaseRepositoryContract
     {
         // TODO: check data for errors!
         $pattern = $data['regex']->patterns()->create([]);
-        $pattern->prefixes()->saveMany($data['prefixes']);
-        $pattern->sections()->saveMany($data['sections']);
+        $pattern->prefixes()->attach($data['prefix_ids']);
+        $pattern->sections()->attach($data['section_ids']);
         return $pattern;
     }
 
@@ -72,5 +78,11 @@ class PatternRepository implements BaseRepositoryContract
     public function deleteWhere($column, $value)
     {
         // TODO: Implement deleteWhere() method.
+    }
+
+
+    public function getRandom()
+    {
+        return $this->model->random()->first();
     }
 }

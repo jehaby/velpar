@@ -31,16 +31,32 @@ class PatternsSeeder extends Seeder
     {
 
         $data = [
-            'user_id' => 1,
-            'regex' => '/руль/ui',  // should process with StringHelper, maybe earlier
-            'section_ids' => [60, 63],  // must be at least one
-            'prefix_ids' => [1, 3, 5],
+            [
+                'regex' => '/руль/ui',  // should process with StringHelper, maybe earlier
+                'section_ids' => [60, 63],  // must be at least one
+                'prefix_ids' => [1, 3, 5]
+            ],
+            [
+                'regex' => '/pattern_to_delete/ui',  // should process with StringHelper, maybe earlier
+                'section_ids' => [60, 63],  // must be at least one
+                'prefix_ids' => [1, 3, 5]
+            ],
+            [
+                'regex' => '/very_special_regex/ui',  // should process with StringHelper, maybe earlier
+                'section_ids' => [60, 63],  // must be at least one
+                'prefix_ids' => [1, 3, 5],
+            ],
+            [
+                'regex' => '/pattern_to_edit/ui',
+                'section_ids' => [130, 131],  // must be at least one
+                'prefix_ids' => [1, 3, 5]
+            ]
+
         ];
 
-
-        $this->service->createOrReturnExisting($data);
-
-
+        foreach ($data as $pattern) {
+            $this->service->create($pattern);
+        }
 
     }
 }

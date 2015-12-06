@@ -17,7 +17,7 @@ Check regex, then check all patterns with same regex if one of them have same se
 
 
 
-## What happens when user edits pattern  ##
+# Editing pattern #
 
 If pattern exists, add *fresh* themes to user. 
 
@@ -25,6 +25,9 @@ If pattern exists, add *fresh* themes to user.
 ### User edits regex ###
 
 Create new pattern (or return existing), delete previous one. (themes deleted).
+
+
+
 
 
 ### User edits sections or/and prefixes ###

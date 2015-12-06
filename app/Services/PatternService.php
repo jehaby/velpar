@@ -49,17 +49,14 @@ class PatternService
      * @throws UserAlreadyHasSuchPatternException()
      * @return \App\Pattern
      */
-    public function createOrReturnExisting(array $data)
+    public function create(array $data)
     {
 
         $pattern = $this->tryFindPattern($data['regex'], $data['section_ids'], $data['prefix_ids']);
 
         if (! $pattern) {
-            $pattern = $this->patternRepository->create([
-                'regex' => $this->regexRepository->findOrCreate($data['regex']),
-                'sections' => $this->sectionRepository->getByIds($data['section_ids'])->all(),
-                'prefixes' => $this->prefixRepository->getByIds($data['prefix_ids'])->all()
-            ]);
+            $data['regex'] = $this->regexRepository->findOrCreate($data['regex']);
+            $pattern = $this->patternRepository->create($data);
         }
 
         $this->userRepository->addPattern($pattern);
@@ -102,23 +99,32 @@ class PatternService
      * Edits existing pattern
      *
      * @param Pattern $pattern
-     * @param array $newData
+     * @param array $newData like ['section]
      */
-    public function edit(Pattern $pattern, array $newData)
+    public function edit(Pattern $oldPattern, array $newData)
     {
 
+        if ($this->patternDidntChange($oldPattern, $newData)) {
+            throw new LogicException('Pattern didn\'t change!');
+        }
 
+        $newPattern = $this->create($newData);
 
-        
-        
+        $this->delete($oldPattern);
 
-
-
-
+        return $newPattern;
         // If pattern has only one user, it should be easy.
         // But what happens with all the themes already connected to this pattern ?!
         // Maybe it will be easier to just create new pattern?
 
+    }
+
+
+    private function patternDidntChange(Pattern $pattern, array $newData)
+    {
+        return $pattern->regex->text == $newData['regex']
+            && arrays_have_same_values($pattern->sections()->lists('id')->all(), $newData['section_ids'])
+            && arrays_have_same_values($pattern->prefixes()->lists('id')->all(), $newData['prefix_ids']);
     }
 
 

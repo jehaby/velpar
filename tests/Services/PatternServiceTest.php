@@ -2,6 +2,7 @@
 
 
 use App\Services\PatternService;
+use App\Repositories\PatternRepository;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 
@@ -14,18 +15,26 @@ class PatternServiceTest extends TestCase
     private $service;
 
 
+    /**
+     * @var PatternRepository
+     */
+    private $patternReposiotry;
+
+
     public function setUp()
     {
         parent::setUp();
-        $this->service = $this->app->make('App\Services\PatternService');
+        $this->service = $this->app->make(PatternService::class);
+
     }
+
 
     /**
      * @dataProvider createDataProvider()
      */
     public function testCreate($data)
     {
-        $this->assertNotNull($newPatternId = $this->service->createOrReturnExisting($data)->id);
+        $this->assertNotNull($newPatternId = $this->service->create($data)->id);
 
         $this->seeInDatabase('regexes', ['text' => $data['regex']]);
         $this->seeInDatabase('patterns', ['id' => $newPatternId]);
@@ -88,23 +97,70 @@ class PatternServiceTest extends TestCase
     }
 
 
-    /**
-     * @param Pattern $pattern deletePatternProvider
-     */
-    public function testDeletePattern(array $data) {
 
+    public function testDeletePattern() {
 
-        
+        $repo = $this->app->make(PatternRepository::class);
+        $pattern = $repo->getRandom();
 
+        $patternId = $pattern->id;
+        $regexId = $pattern->regex_id;
+        $prefixesIds = $pattern->prefixes()->lists('id')->all();
+        $sectionsIds = $pattern->sections()->lists('id')->all();
+
+        $this->deleteTestHelper('seeInDatabase', $patternId, $regexId, $prefixesIds, $sectionsIds);
+        $this->service->delete($pattern);
+        $this->deleteTestHelper('dontSeeInDatabase', $patternId, $regexId, $prefixesIds, $sectionsIds);
 
     }
 
 
-    public function deletePatternProvider()
+    private function deleteTestHelper($method, $patternId, $regexId, $prefixesIds, $sectionsIds)
     {
-        return [
-            ''
-        ];
+        $this->$method('patterns', ['id' => $patternId, 'regex_id' => $regexId]);
+
+        foreach ($prefixesIds as $prefix_id) {
+            $this->$method('pattern_prefix', ['pattern_id' => $patternId, 'prefix_id' => $prefix_id]);
+        }
+
+        foreach ($sectionsIds as $section_id) {
+            $this->$method('pattern_section', ['pattern_id' => $patternId, 'section_id' => $section_id]);
+        }
+
     }
+
+
+    public function testEditPattern()
+    {
+        $repo = $this->app->make(PatternRepository::class);
+        $pattern = $repo->getRandom();
+
+        $patternId = $pattern->id;
+        $regexId = $pattern->regex->id;
+        $prefixesIds = $pattern->prefixes()->lists('id')->all();
+        $sectionsIds = $pattern->sections()->lists('id')->all();
+
+        $newSections = [70, 80];
+
+        $editedPattern = $this->service->edit($pattern, ['regex' => '/Emma Watson/ui', 'section_ids' => $newSections, 'prefix_ids' => []]);
+
+        $this->seeInDatabase('patterns', ['id' => $editedPattern->id, 'regex_id' => $editedPattern->regex->id]);
+        foreach ($newSections as $sectionId) {
+            $this->seeInDatabase('pattern_section', ['pattern_id' => $editedPattern->id, 'section_id' => $sectionId]);
+        }
+        $this->dontSeeInDatabase('pattern_prefix', ['pattern_id' => $editedPattern->id]);
+    }
+    
+
+
+//    public function deletePatternProvider()
+//    {
+//
+//        $pattern = $this->patternReposiotry->getRandom();
+//
+//        return [
+//            [$pattern]
+//        ];
+//    }
 
 }

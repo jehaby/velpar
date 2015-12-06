@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Prefix;
+use App\Repositories\PatternRepository;
 use App\Repositories\SectionRepository;
 use App\Services\PatternService;
 use Illuminate\Http\Request;
@@ -31,22 +32,36 @@ class TestController extends Controller
 
 
 
-    public function test(PatternService $service)
+    public function test(PatternRepository $repository)
     {
 
+        $pattern = $repository->getRandom();
 
-        dump(\Auth::user());
-        dd('wtklsdjf');
+        $pattern_prefix = array_map(function($item) use ($pattern) {
+            return ['pattern_id' => $pattern->id, 'prefix_id' => $item];
+        }, $pattern->prefixes()->lists('id')->all());
 
-        $data =                 [
-            'user_id' => 1,
+        dd($pattern_prefix);
+
+        dd($repository->getRandom());
+
+        $pattern = Pattern::random()->first();
+
+        $pattern_prefix = array_map(function($item) use ($pattern) {
+            return ['pattern_id' => $pattern->id, 'prefix_id' => $item];
+        }, $pattern->prefixes()->lists('id')->all());
+
+
+
+
+
+        $data =  [
             'regex' => '/new_shit/ui',  // should process with StringHelper, maybe earlier
-            'section_ids' => [60, 63],  // must be at least one
+            'section_ids' => [60, 63, 1],  // must be at least one
             'prefix_ids' => [1, 3, 5],
         ];
 
-
-        $pattern = $service->createOrReturnExisting($data);
+        $pattern = $service->create($data);
 
         dd($pattern);
 
@@ -65,7 +80,7 @@ class TestController extends Controller
         ];
 
 
-        $pattern = $service->createOrReturnExisting($data);
+        $pattern = $service->create($data);
         dd($pattern);
     }
 
